@@ -1,0 +1,196 @@
+/**
+ * Simple css page for hw1.
+ * 
+ * David Lu (dlu1)
+ */
+
+
+/* 
+ * Transition class for smoother animations.
+ */
+.transition
+{
+	/* Supporting previous old browsers. */
+	-webkit-transition: all 0.4s ease-out;
+	-moz-transition: all 0.4s ease-out;
+	-o-transition: all 0.4s ease-out;
+
+	transition: all 0.4s ease-out;
+}
+
+/* 
+ * Fast transition class for faster animations.
+ */
+.transFast
+{
+	/* Supporting previous old browsers. */
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	-o-transition: all 0.2s ease-out;
+
+	transition: all 0.2s ease-out;
+}
+
+
+
+/**
+ * General CSS.
+ */
+
+html, body
+{
+	/* Adjusts font-size to be managable via 'em' values. */
+	font-size: 62.5%;
+
+	/* Adjusts margins and padding. (a mini 'css reset') */
+	margin: 0px;
+	padding: 0px;
+	vertical-align: baseline;
+}
+
+div, span, h1, h2, h3, p, ul, li
+{
+	font-size: 100%;
+	margin: 0em;
+	padding: 0em;
+	vertical-align: baseline;
+}
+
+body
+{
+	background-color: #DDD;
+}
+
+
+/* Styling for list items. */
+li
+{
+    display: list-item;
+}
+
+/* Styling Horizonal Rules. */
+hr
+{
+	margin: 4em 2em;
+	width: 740px;
+	height: 1px;
+	border: 0;
+	background-image: linear-gradient(to right, 
+		rgba(10, 10, 10, 0), 
+		rgba(10, 10, 10, 1) 25%, 
+		rgba(10, 10, 10, 1) 50%,
+		rgba(10, 10, 10, 0) 75%,
+		rgba(10, 10, 10, 0));
+}
+
+/* 
+ * Styling all links that are displayed on the website.
+ * 
+ * First regular/visited, then hover versions.
+ */
+a:link
+{
+	color: rgba(36, 80, 236, 0.9);
+	text-decoration: none;
+	cursor: auto;
+}
+a:visited
+{
+	color: rgba(110, 42, 236, 0.9);
+	text-decoration: none;
+	cursor: auto;
+}
+
+/* Hover */
+a:link:hover
+{
+	color: rgba(64, 124, 250, 0.9);
+}
+a:visited:hover
+{
+	color: rgba(142, 66, 250, 0.9);
+}
+
+/* Hovering over a link */
+a:hover
+{
+	text-decoration: underline;
+}
+
+/*
+ * Styling active links.
+ * (I believe this refers to links that are clicked on.)
+ */
+a:link:active, a:visited:active
+{
+	/*color: red;*/
+	/*text-decoration: line-through;*/
+}
+
+
+
+
+h1
+{
+	
+	font-family: 'Source Sans Pro', 'Helvetica', helvetica, sans-serif;
+	font-weight: 200;
+	font-size: 8em;
+	line-height: 86%;
+	/*letter-spacing: 0.02em;*/
+	margin: 0.5em 0.4em 0.1em 0.4em;
+	color: #222;
+}
+
+h2
+{
+	font-family: 'Lato', helvetica, sans-serif;
+	font-weight: 400;
+	font-size: 4em;
+	line-height: 200%;
+	letter-spacing: 0.02em;
+	margin: 0.1em 0.8em 0.15em 1.2em;
+	color: #444;
+}
+
+h3
+{
+	font-family: 'Lato', helvetica, sans-serif;
+	font-weight: 400;
+	font-size: 6.4em;
+	margin: 1em 1em 0.2em 1em;		/* Top | Right | Bottom | Left */
+}
+
+p
+{
+	font-family: helvetica, sans-serif;
+	font-weight: 200;
+	font-size: 4em;
+	margin: 0.5em 0.4em 0.1em 0.4em;
+}
+
+svg
+{
+	font-size: 6.4em;
+	margin: 0.1em 0.4em 0.1em 1em;
+}
+
+
+
+/********** ********** ********** ********** **********
+ * Tables 
+ ********** ********** ********** ********** ********** */
+
+table
+{
+	font-family: helvetica, sans-serif;
+	font-weight: 200;
+	font-size: 2.4em;
+	margin: 0.5em 0.4em 0.1em 2.4em;
+}
+
+th, td
+{
+	padding: 0.2em 0.4em;
+	border-bottom: 1px solid #BBB;
+}
