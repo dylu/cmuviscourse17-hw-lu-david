@@ -5,38 +5,6 @@
  */
 
 
-/* 
- * Transition class for smoother animations.
- */
-.transition
-{
-	/* Supporting previous old browsers. */
-	-webkit-transition: all 0.4s ease-out;
-	-moz-transition: all 0.4s ease-out;
-	-o-transition: all 0.4s ease-out;
-
-	transition: all 0.4s ease-out;
-}
-
-/* 
- * Fast transition class for faster animations.
- */
-.transFast
-{
-	/* Supporting previous old browsers. */
-	-webkit-transition: all 0.2s ease-out;
-	-moz-transition: all 0.2s ease-out;
-	-o-transition: all 0.2s ease-out;
-
-	transition: all 0.2s ease-out;
-}
-
-
-
-/**
- * General CSS.
- */
-
 html, body
 {
 	/* Adjusts font-size to be managable via 'em' values. */
@@ -60,74 +28,6 @@ body
 {
 	background-color: #DDD;
 }
-
-
-/* Styling for list items. */
-li
-{
-    display: list-item;
-}
-
-/* Styling Horizonal Rules. */
-hr
-{
-	margin: 4em 2em;
-	width: 740px;
-	height: 1px;
-	border: 0;
-	background-image: linear-gradient(to right, 
-		rgba(10, 10, 10, 0), 
-		rgba(10, 10, 10, 1) 25%, 
-		rgba(10, 10, 10, 1) 50%,
-		rgba(10, 10, 10, 0) 75%,
-		rgba(10, 10, 10, 0));
-}
-
-/* 
- * Styling all links that are displayed on the website.
- * 
- * First regular/visited, then hover versions.
- */
-a:link
-{
-	color: rgba(36, 80, 236, 0.9);
-	text-decoration: none;
-	cursor: auto;
-}
-a:visited
-{
-	color: rgba(110, 42, 236, 0.9);
-	text-decoration: none;
-	cursor: auto;
-}
-
-/* Hover */
-a:link:hover
-{
-	color: rgba(64, 124, 250, 0.9);
-}
-a:visited:hover
-{
-	color: rgba(142, 66, 250, 0.9);
-}
-
-/* Hovering over a link */
-a:hover
-{
-	text-decoration: underline;
-}
-
-/*
- * Styling active links.
- * (I believe this refers to links that are clicked on.)
- */
-a:link:active, a:visited:active
-{
-	/*color: red;*/
-	/*text-decoration: line-through;*/
-}
-
-
 
 
 h1
@@ -169,6 +69,7 @@ p
 	margin: 0.5em 0.4em 0.1em 0.4em;
 }
 
+/* SVG Elements */
 svg
 {
 	font-size: 6.4em;
@@ -184,11 +85,22 @@ svg
 }
 
 
+/* Styling Horizonal Rules. */
+hr
+{
+	margin: 4em 2em;
+	width: 740px;
+	height: 1px;
+	border: 0;
+	background-image: linear-gradient(to right, 
+		rgba(10, 10, 10, 0), 
+		rgba(10, 10, 10, 1) 25%, 
+		rgba(10, 10, 10, 1) 50%,
+		rgba(10, 10, 10, 0) 75%,
+		rgba(10, 10, 10, 0));
+}
 
-/********** ********** ********** ********** **********
- * Tables 
- ********** ********** ********** ********** ********** */
-
+/* Table */
 table
 {
 	font-family: helvetica, sans-serif;
