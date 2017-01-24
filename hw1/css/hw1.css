@@ -76,7 +76,12 @@ svg
 	margin: 0.1em 0.4em 0.2em 1em;
 }
 
-.svgBar
+.svgBackground
+{
+	fill:#FAFAFA;
+}
+
+.svgVisual
 {
 	fill: #88AADD;
 	stroke: #4488AA;
@@ -84,6 +89,22 @@ svg
 	stroke-opacity: 0.8;
 }
 
+.svgAxis
+{
+	stroke: #224686;
+	stroke-width: 2px;
+	stroke-opacity: 0.16;
+}
+
+.svgLine
+{
+	fill:none;
+}
+
+.svgArea
+{
+	fill:none;
+}
 
 /* Styling Horizonal Rules. */
 hr
