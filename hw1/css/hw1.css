@@ -175,6 +175,14 @@ svg
 	margin: 0.1em 0.4em 0.2em 1em;
 }
 
+.svgBar
+{
+	fill: #88AADD;
+	stroke: #4488AA;
+	stroke-width: 2px;
+	stroke-opacity: 0.8;
+}
+
 
 
 /********** ********** ********** ********** **********
