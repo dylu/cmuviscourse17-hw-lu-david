@@ -87,6 +87,20 @@ svg
 	stroke: #4488AA;
 	stroke-width: 2px;
 	stroke-opacity: 0.8;
+
+	/* Supporting previous old browsers. */
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	-o-transition: all 0.2s ease-out;
+
+	transition: all 0.2s ease-out;
+}
+
+.svgVisual:hover
+{
+	fill: #99BBEE;
+	stroke: #66AACC;
+	stroke-opacity: 0.8;
 }
 
 .svgAxis
@@ -96,10 +110,12 @@ svg
 	stroke-opacity: 0.16;
 }
 
-.svgLine
+.svgLine, .svgLine:hover
 {
+	stroke-width: 3px;
 	fill:none;
 }
+
 
 /* Styling Horizonal Rules. */
 hr
