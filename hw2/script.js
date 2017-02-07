@@ -151,7 +151,7 @@ function updateBarChart(selectedDimension)
                 .style("top", (curr_loc[1] + yAdj) + "px");
 
             tt.select("#title")
-                .text(d.year + ":");
+                .text([selectedDimension] + " " + d.year + ":");
             tt.select("#value")
                 .text(d[selectedDimension]);
 
@@ -163,6 +163,10 @@ function updateBarChart(selectedDimension)
             });
             
             d3.select("#bars_tooltip").classed("hidden", true);
+        })
+        .on('click', function(d) {
+            console.log("Selected the " + d.year + " value for " + 
+                [selectedDimension] + ", " + d[selectedDimension]);
         });
 
 
