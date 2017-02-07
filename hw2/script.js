@@ -8,8 +8,8 @@ var allWorldCupData;
  */
 function updateBarChart(selectedDimension)
 {
-    // var data = allWorldCupData;
-    // var data = [30, 80, 10, 40, 120, 130, 20, 120, 820, 40, 20, 30];
+    var headerOffset = 100;     // header is 100 px.
+
     var height = 500;
     var width = 800;
     var svg = d3.select("svg");
@@ -28,6 +28,7 @@ function updateBarChart(selectedDimension)
     // var axisHeight = 20;
     var chartWidth = svgBounds.width * 24/25;
     var chartHeight = svgBounds.height * 24/25;
+    var textHeight = 10;
 
     // ******* TODO: PART I *******
 
@@ -65,6 +66,11 @@ function updateBarChart(selectedDimension)
     var colorScale = d3.scaleLinear()
         .domain([0, maxYval])
         .range(["#90CAF9", "#1565C0"]);     // Blue 200 - 800
+
+    // Hover Interaction.
+    var hover_colorScale = d3.scaleLinear()
+        .domain([0, maxYval])
+        .range(["#B39DDB", "#4527A0"]);     // Deep Purple 200 - 800
 
     // Create the axes (hint: use #xAxis and #yAxis)
     var xAxis = d3.axisBottom();
@@ -111,7 +117,138 @@ function updateBarChart(selectedDimension)
         })
         .style("fill", function(d) {
             return colorScale(d[selectedDimension]);
+        })
+        // .append("text")
+        // .attr("fill", "white")
+        // .text(function(d){
+        //     // console.log(d[selectedDimension]);
+        //     return d[selectedDimension];
+        // })
+        .on('mouseover', function(d) {
+            var nodeSelection = d3.select(this).style("fill", function(d) {
+                return hover_colorScale(d[selectedDimension]);
+            });
+
+            d3.select("#bars_tooltip").classed("hidden", false);
+        })
+        .on('mousemove', function(d) {
+
+            var curr_loc = d3.mouse(this);
+
+            // fine tuning
+            var xAdj = 16;
+            var yAdj = 24 + headerOffset;
+            
+            var tt = d3.select("#bars_tooltip")
+                .style("left", (curr_loc[0] + xAdj) + "px")
+                .style("top", (curr_loc[1] + yAdj) + "px");
+
+            tt.select("#title")
+                .text(d.year + ":");
+            tt.select("#value")
+                .text(d[selectedDimension]);
+
+            tt.classed("hidden", false);
+        })
+        .on('mouseout', function(d) {
+            var nodeSelection = d3.select(this).style("fill", function(d) {
+                return colorScale(d[selectedDimension]);
+            });
+            
+            d3.select("#bars_tooltip").classed("hidden", true);
         });
+
+
+    // var tooltip = d3.select("body");
+
+    // tooltip = tooltip.enter()
+    //     .append("tooltip")
+    //     .merge(tooltip);
+
+    // tooltip.exit().remove();
+
+    // function tooltip(data, xloc, yloc)
+    // {
+    //     d3.select("body")
+    //         .append("div")
+    //         .attr("x", "200")
+    //         .attr("y", "200")
+    //         .style("fill", "#222")
+    //         .style("font-size", "20em")
+    //         .style("position", "absolute")
+    //         .style("z-index", "10000")
+    //         .style("visibility", "visible")
+    //         .text("a simple tooltip");
+    // }
+
+    // var tooltip = d3.select("#bars_tooltip").selectAll("tooltip");
+
+    // tooltip = tooltip.enter()
+    //     .append("tooltip")
+    //     .merge(tooltip);
+
+    // // var tooltip = d3.select("#bars_tooltip")
+    // // var tooltip = d3.select("body")
+    // tooltip
+    //     .append("div")
+    //     .attr("x", "200")
+    //     .attr("y", "200")
+    //     .style("fill", "#222")
+    //     .style("font-size", "20em")
+    //     .style("position", "absolute")
+    //     .style("z-index", "10000")
+    //     .style("visibility", "hidden")
+    //     .text("a simple tooltip");
+
+
+    // bars.append("text")
+    //     .attr("class", "label")
+    //     .style("fill", "#222")
+    //     .attr("y", function(d, i) {
+    //         return yScale(d[selectedDimension]);
+    //     })
+    //     .attr("dy", ".35em")
+    //     .text(function(d) {
+    //         return d[selectedDimension];
+    //     });
+
+        // d3.select("#bars").attr("fill", "black");
+        // console.log(d3.select("#bars").selectAll("rect"));
+        // console.log(d3.select("#bars").selectAll("rect").select("childNodes"));
+        // console.log(d3.select("#bars"));
+
+
+    // var barText = svg.select("#bars").selectAll("text").data(allWorldCupData);
+
+    // barText = barText.enter()
+    //     .append("text")
+    //     .merge(barText);
+
+    // barText.exit().remove();
+
+    // barText.attr("x", function(d) {
+    //         return xScale(d.year);
+    //     })
+    //     .attr("y", function(d, i) {
+    //         return yScale(d[selectedDimension]) + textHeight;
+    //     })
+    //     .style("fill", "#222")
+    //     .text(function(d){
+    //         console.log(d[selectedDimension]);
+    //         return d[selectedDimension];
+    //     })
+    //     .on('mouseover', function(d) {
+    //         // var nodeSelection = d3.select(this).style("fill", function(d) {
+    //         //     return hover_colorScale(d[selectedDimension]);
+    //         // });
+    //         d3.select(this).style("opacity", 1.0);
+    //     })
+    //     .on('mouseout', function(d) {
+    //         // var nodeSelection = d3.select(this).style("fill", function(d) {
+    //         //     return colorScale(d[selectedDimension]);
+    //         // });
+    //         d3.select(this).style("opacity", 0);
+    //     });
 
     // ******* TODO: PART II *******
 
