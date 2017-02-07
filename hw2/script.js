@@ -10,20 +10,23 @@ function updateBarChart(selectedDimension)
 {
     // var data = allWorldCupData;
     // var data = [30, 80, 10, 40, 120, 130, 20, 120, 820, 40, 20, 30];
-    var height = 400;
+    var height = 500;
     var width = 800;
     var svg = d3.select("svg");
     svg.attr("width", width)
         .attr("height", height);
 
     var svgBounds = d3.select("#barChart").node().getBoundingClientRect(),
-        xAxisWidth = 100,
+        xAxisWidth = 40,
         yAxisHeight = 70;
 
     // padding size between bars.
     // chartWidth prevents cutting off on the far right.
-    var padding = 1;
-    var chartWidth = width*24/25;
+    var xPadding = 2;
+    // var axisWidth = 20;
+    // var axisHeight = 20;
+    var chartWidth = svgBounds.width * 24/25;
+    var chartHeight = svgBounds.height * 24/25;
 
     // ******* TODO: PART I *******
 
@@ -38,7 +41,8 @@ function updateBarChart(selectedDimension)
     var years = [];
     allWorldCupData.forEach(function (d) {
         years.push(d.year);
-    })
+    });
+    years.sort();   // sorting by year, low->high.
 
     // var xScale = d3.scaleLinear()
     //     .domain([minYear, maxYear])
@@ -48,13 +52,13 @@ function updateBarChart(selectedDimension)
 
     var xScale = d3.scaleBand()
         .domain(years)
-        .range([0, chartWidth])
+        .range([xAxisWidth, chartWidth])
         .paddingInner(0.8)
         .paddingOuter(0.1);
 
     var yScale = d3.scaleLinear()
         .domain([0, maxYval])
-        .range([svgBounds.height, 0]).nice();
+        .range([chartHeight, 0]).nice();
 
     // Create colorScale
     var colorScale = d3.scaleLinear()
@@ -82,10 +86,10 @@ function updateBarChart(selectedDimension)
             return yScale(d[selectedDimension]);
         })
         .attr("width", function (d) {
-            return (chartWidth / allWorldCupData.length);
+            return ((chartWidth - xAxisWidth) / allWorldCupData.length) - xPadding;
         })
         .attr("height", function (d) {
-            return svgBounds.height - yScale(d[selectedDimension]);
+            return (chartHeight - yAxisHeight) - yScale(d[selectedDimension]);
         })
         .style("fill", function(d) {
             return colorScale(d[selectedDimension]);
