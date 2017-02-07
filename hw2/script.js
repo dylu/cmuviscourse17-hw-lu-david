@@ -18,10 +18,9 @@ function updateBarChart(selectedDimension)
 {
     // header changes based on window size, hard coding for now.
     //var headerOffset = d3.select("header").node().getBoundingClientRect().height;
-    var headerOffset = 120;     // header is 140px.
+    var headerOffset = 120;     // header is 120px.
     var trans_dur = 1200;       // transition duration in ms.
 
-    console.log(headerOffset);
     var height = 500;
     var width = 800;
     var svg = d3.select("svg");
@@ -36,9 +35,7 @@ function updateBarChart(selectedDimension)
     // chartWidth prevents cutting off on the far right.
     var xPadding = 2;
     var yPadding = 10;
-    // var axisWidth = 20;
-    // var axisHeight = 20;
-    var chartWidth = svgBounds.width * 24/25;
+    var chartWidth = svgBounds.width * 45/46;
     var chartHeight = svgBounds.height * 24/25;
     var textHeight = 10;
 
@@ -191,6 +188,17 @@ function updateBarChart(selectedDimension)
                         return hover_colorScale(d[selectedDimension]);
                     });
                 });
+
+            d3.select("#selectionText").html(
+                    "<b>" + 
+                    capitalize([selectedDimension].toString()) + ", " +
+                    d.year + 
+                    "</b>  &ndash;  " +
+                    d[selectedDimension]);
+
+            d3.select("#selectionTitle").classed("hidden", false);
+            d3.select("#selectionText").classed("hidden", false);
+
             console.log("Selected the " + d.year + " value for " + 
                 [selectedDimension] + ", " + d[selectedDimension]);
         });
@@ -311,6 +319,9 @@ function chooseData() {
     //Changed the selected data when a user selects a different
     // menu item from the drop down.
     updateBarChart(d3.select("#dataset").node().value);
+
+    d3.select("#selectionTitle").classed("hidden", true);
+    d3.select("#selectionText").classed("hidden", true);
 }
 
 /* DATA LOADING */

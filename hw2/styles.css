@@ -23,6 +23,11 @@ body
     background-color: #FFF;
 }
 
+header, body
+{
+    padding-left: 2em;
+}
+
 
 header h1 {
     padding-bottom: 0.1em;
@@ -106,7 +111,7 @@ h2 {
 }
 
 h3 {
-    font-size: 1.8em;
+    font-size: 1.6em;
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
@@ -179,6 +184,17 @@ header {
     stroke: black;
 }
 
+#xAxis text,
+#yAxis text {
+    font-size: 14px;
+
+}
+
+
+.hidden {
+    display: none;
+}
+
 #bars_tooltip {
     opacity: 0.92;
     position: absolute;
@@ -191,9 +207,6 @@ header {
     box-shadow: .2em .2em .6em rgba(0, 0, 0, 0.2);
 }
 
-#bars_tooltip.hidden {
-    display: none;
-}
 #bars_tooltip span {
     margin: 0;
     font-family: sans-serif;
@@ -204,8 +217,13 @@ header {
     font-weight: bold;
 }
 
-#xAxis text,
-#yAxis text {
-    font-size: 14px;
+#selectionTitle h3 {
+    font-weight: normal;
+}
 
+#selectionText {
+    font-size: 1.4em;
+    padding-top: 0.2em;
+    padding-left: 0.6em;
+    padding-bottom: 0.4em;
 }
