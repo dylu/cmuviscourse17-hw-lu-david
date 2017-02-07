@@ -24,6 +24,11 @@ body
 }
 
 
+header h1 {
+    padding-bottom: 0.1em;
+    /*margin-bottom: 3.5em;*/
+}
+
 
 
 /* note: some of the stylings are not relevant for homework 2, but may be useful in the next assignment */
@@ -114,7 +119,7 @@ header {
     padding: 0.5em;
     clear: left;
     text-align: left;
-    height: 100px;
+    height: 120px;
     font-size: 2em;
 }
 

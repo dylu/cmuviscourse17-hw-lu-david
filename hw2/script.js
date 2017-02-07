@@ -16,9 +16,12 @@ function capitalize(str) {
  */
 function updateBarChart(selectedDimension)
 {
-    var headerOffset = 100;     // header is 100 px.
+    // header changes based on window size, hard coding for now.
+    //var headerOffset = d3.select("header").node().getBoundingClientRect().height;
+    var headerOffset = 120;     // header is 140px.
     var trans_dur = 1200;       // transition duration in ms.
 
+    console.log(headerOffset);
     var height = 500;
     var width = 800;
     var svg = d3.select("svg");
@@ -154,7 +157,7 @@ function updateBarChart(selectedDimension)
 
             // fine tuning
             var xAdj = 16;
-            var yAdj = 26 + headerOffset;
+            var yAdj = 28 + headerOffset;
             
             var tt = d3.select("#bars_tooltip")
                 .style("left", (curr_loc[0] + xAdj) + "px")
@@ -180,7 +183,7 @@ function updateBarChart(selectedDimension)
         .on('click', function(d) {
             var nodeSelection = d3.select(this)
                 .transition().duration(trans_dur/16)
-                .style("fill", "#BBB")
+                .style("fill", "#CCC")
                 .on("end", function() {
                     d3.select(this)
                     .transition().duration(trans_dur/4)
