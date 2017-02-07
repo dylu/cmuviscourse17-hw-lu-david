@@ -17,7 +17,7 @@ function capitalize(str) {
 function updateBarChart(selectedDimension)
 {
     var headerOffset = 100;     // header is 100 px.
-    var trans_dur = 1600;       // transition duration in ms.
+    var trans_dur = 1200;       // transition duration in ms.
 
     var height = 500;
     var width = 800;
@@ -140,7 +140,9 @@ function updateBarChart(selectedDimension)
         //     return d[selectedDimension];
         // })
     bars.on('mouseover', function(d) {
-            var nodeSelection = d3.select(this).style("fill", function(d) {
+            // No transition time on mouseover, to preserve responsiveness.
+            var nodeSelection = d3.select(this)
+                .style("fill", function(d) {
                 return hover_colorScale(d[selectedDimension]);
             });
 
@@ -159,14 +161,17 @@ function updateBarChart(selectedDimension)
                 .style("top", (curr_loc[1] + yAdj) + "px");
 
             tt.select("#title")
-                .text(capitalize([selectedDimension].toString()) + " " + d.year + ":");
+                .text(capitalize([selectedDimension].toString()) + 
+                    " " + d.year + ":");
             tt.select("#value")
                 .text(d[selectedDimension]);
 
             tt.classed("hidden", false);
         })
         .on('mouseout', function(d) {
-            var nodeSelection = d3.select(this).style("fill", function(d) {
+            var nodeSelection = d3.select(this)
+                .transition().duration(trans_dur/4)
+                .style("fill", function(d) {
                 return colorScale(d[selectedDimension]);
             });
             
