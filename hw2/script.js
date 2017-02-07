@@ -1,7 +1,6 @@
 // Global var for FIFA world cup data
 var allWorldCupData;
 
-
 /**
  * Helper function to capitalize words. (Purely for aesthetics.)
  */
@@ -16,7 +15,7 @@ function capitalize(str) {
  */
 function updateBarChart(selectedDimension)
 {
-    // header changes based on window size, hard coding for now.
+    // header changes based on window size, so hard coding for now.
     //var headerOffset = d3.select("header").node().getBoundingClientRect().height;
     var headerOffset = 120;     // header is 120px.
     var trans_dur = 1200;       // transition duration in ms.
@@ -55,12 +54,6 @@ function updateBarChart(selectedDimension)
     });
     years.sort();   // sorting by year, low->high.
 
-    // var xScale = d3.scaleLinear()
-    //     .domain([minYear, maxYear])
-    //     .range([0, svgBounds.width]).nice();
-
-    // console.log(allWorldCupData);
-
     var xScale = d3.scaleBand()
         .domain(years)
         .range([xAxisWidth, chartWidth])
@@ -84,7 +77,6 @@ function updateBarChart(selectedDimension)
     // Create the axes (hint: use #xAxis and #yAxis)
     var xAxis = d3.axisBottom();
     xAxis.scale(xScale);//.ticks(20);
-    // xAxis
 
     var yAxis = d3.axisLeft();
     yAxis.scale(yScale);
@@ -97,7 +89,6 @@ function updateBarChart(selectedDimension)
       .selectAll("text")
         .attr("y", -5)
         .attr("x", -28)
-        //.attr("dy", "0.35em")
         .attr("transform", "rotate(-90)");
 
     svg.select("#yAxis")
@@ -107,7 +98,6 @@ function updateBarChart(selectedDimension)
         .call(yAxis);
 
     // Create the bars (hint: use #bars)
-
     var bars = svg.select("#bars").selectAll("rect").data(allWorldCupData);
 
     bars = bars.enter()
@@ -133,12 +123,16 @@ function updateBarChart(selectedDimension)
         .style("fill", function(d) {
             return colorScale(d[selectedDimension]);
         });
-        // .append("text")
-        // .attr("fill", "white")
-        // .text(function(d){
-        //     // console.log(d[selectedDimension]);
-        //     return d[selectedDimension];
-        // })
+
+    // ******* TODO: PART II *******
+
+    // Implement how the bars respond to click events
+    // Color the selected bar to indicate is has been selected.
+    // Make sure only the selected bar has this new color.
+
+    // Output the selected bar to the console using console.log()
+
+        // Change color of bar being hovered over.
     bars.on('mouseover', function(d) {
             // No transition time on mouseover, to preserve responsiveness.
             var nodeSelection = d3.select(this)
@@ -148,8 +142,8 @@ function updateBarChart(selectedDimension)
 
             d3.select("#bars_tooltip").classed("hidden", false);
         })
+        // Tooltip follows mouse.
         .on('mousemove', function(d) {
-
             var curr_loc = d3.mouse(this);
 
             // fine tuning
@@ -168,6 +162,7 @@ function updateBarChart(selectedDimension)
 
             tt.classed("hidden", false);
         })
+        // Original bar color restored.
         .on('mouseout', function(d) {
             var nodeSelection = d3.select(this)
                 .transition().duration(trans_dur/4)
@@ -177,6 +172,7 @@ function updateBarChart(selectedDimension)
             
             d3.select("#bars_tooltip").classed("hidden", true);
         })
+        // Log + Display selected bar data.
         .on('click', function(d) {
             var nodeSelection = d3.select(this)
                 .transition().duration(trans_dur/16)
@@ -189,6 +185,7 @@ function updateBarChart(selectedDimension)
                     });
                 });
 
+            // Outputting selection to selectionText.
             d3.select("#selectionText").html(
                     "<b>" + 
                     capitalize([selectedDimension].toString()) + ", " +
@@ -199,112 +196,10 @@ function updateBarChart(selectedDimension)
             d3.select("#selectionTitle").classed("hidden", false);
             d3.select("#selectionText").classed("hidden", false);
 
+            // Outputting selection to console.
             console.log("Selected the " + d.year + " value for " + 
                 [selectedDimension] + ", " + d[selectedDimension]);
         });
-
-    function callback() {
-
-    };
-    // var tooltip = d3.select("body");
-
-    // tooltip = tooltip.enter()
-    //     .append("tooltip")
-    //     .merge(tooltip);
-
-    // tooltip.exit().remove();
-
-    // function tooltip(data, xloc, yloc)
-    // {
-    //     d3.select("body")
-    //         .append("div")
-    //         .attr("x", "200")
-    //         .attr("y", "200")
-    //         .style("fill", "#222")
-    //         .style("font-size", "20em")
-    //         .style("position", "absolute")
-    //         .style("z-index", "10000")
-    //         .style("visibility", "visible")
-    //         .text("a simple tooltip");
-    // }
-
-    // var tooltip = d3.select("#bars_tooltip").selectAll("tooltip");
-
-    // tooltip = tooltip.enter()
-    //     .append("tooltip")
-    //     .merge(tooltip);
-
-    // // var tooltip = d3.select("#bars_tooltip")
-    // // var tooltip = d3.select("body")
-    // tooltip
-    //     .append("div")
-    //     .attr("x", "200")
-    //     .attr("y", "200")
-    //     .style("fill", "#222")
-    //     .style("font-size", "20em")
-    //     .style("position", "absolute")
-    //     .style("z-index", "10000")
-    //     .style("visibility", "hidden")
-    //     .text("a simple tooltip");
-
-
-    // bars.append("text")
-    //     .attr("class", "label")
-    //     .style("fill", "#222")
-    //     .attr("y", function(d, i) {
-    //         return yScale(d[selectedDimension]);
-    //     })
-    //     .attr("dy", ".35em")
-    //     .text(function(d) {
-    //         return d[selectedDimension];
-    //     });
-
-        // d3.select("#bars").attr("fill", "black");
-        // console.log(d3.select("#bars").selectAll("rect"));
-        // console.log(d3.select("#bars").selectAll("rect").select("childNodes"));
-        // console.log(d3.select("#bars"));
-
-
-    // var barText = svg.select("#bars").selectAll("text").data(allWorldCupData);
-
-    // barText = barText.enter()
-    //     .append("text")
-    //     .merge(barText);
-
-    // barText.exit().remove();
-
-    // barText.attr("x", function(d) {
-    //         return xScale(d.year);
-    //     })
-    //     .attr("y", function(d, i) {
-    //         return yScale(d[selectedDimension]) + textHeight;
-    //     })
-    //     .style("fill", "#222")
-    //     .text(function(d){
-    //         console.log(d[selectedDimension]);
-    //         return d[selectedDimension];
-    //     })
-    //     .on('mouseover', function(d) {
-    //         // var nodeSelection = d3.select(this).style("fill", function(d) {
-    //         //     return hover_colorScale(d[selectedDimension]);
-    //         // });
-    //         d3.select(this).style("opacity", 1.0);
-    //     })
-    //     .on('mouseout', function(d) {
-    //         // var nodeSelection = d3.select(this).style("fill", function(d) {
-    //         //     return colorScale(d[selectedDimension]);
-    //         // });
-    //         d3.select(this).style("opacity", 0);
-    //     });
-
-    // ******* TODO: PART II *******
-
-    // Implement how the bars respond to click events
-    // Color the selected bar to indicate is has been selected.
-    // Make sure only the selected bar has this new color.
-
-    // Output the selected bar to the console using console.log()
-
 }
 
 /**
@@ -355,5 +250,8 @@ d3.csv("data/fifa-world-cup.csv", function (error, csv) {
     // Store csv data in a global variable
     allWorldCupData = csv;
     // Draw the Bar chart for the first time
-    updateBarChart('attendance');
+    // updateBarChart('attendance');
+
+    // chooseData is more versatile, in case dropdown values is changed.
+    chooseData();
 });
