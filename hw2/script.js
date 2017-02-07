@@ -17,12 +17,13 @@ function updateBarChart(selectedDimension)
         .attr("height", height);
 
     var svgBounds = d3.select("#barChart").node().getBoundingClientRect(),
-        xAxisWidth = 40,
-        yAxisHeight = 70;
+        xAxisWidth = 60,
+        yAxisHeight = 36;
 
     // padding size between bars.
     // chartWidth prevents cutting off on the far right.
     var xPadding = 2;
+    var yPadding = 10;
     // var axisWidth = 20;
     // var axisHeight = 20;
     var chartWidth = svgBounds.width * 24/25;
@@ -53,12 +54,12 @@ function updateBarChart(selectedDimension)
     var xScale = d3.scaleBand()
         .domain(years)
         .range([xAxisWidth, chartWidth])
-        .paddingInner(0.8)
-        .paddingOuter(0.1);
+        .paddingInner(0.1)
+        .paddingOuter(0.12);
 
     var yScale = d3.scaleLinear()
         .domain([0, maxYval])
-        .range([chartHeight, 0]).nice();
+        .range([chartHeight - yAxisHeight, yPadding]).nice();
 
     // Create colorScale
     var colorScale = d3.scaleLinear()
@@ -67,7 +68,24 @@ function updateBarChart(selectedDimension)
 
     // Create the axes (hint: use #xAxis and #yAxis)
     var xAxis = d3.axisBottom();
-        xAxis.scale(xScale).ticks(20);
+    xAxis.scale(xScale);//.ticks(20);
+    // xAxis
+
+    var yAxis = d3.axisLeft();
+    yAxis.scale(yScale);
+
+    svg.select("#xAxis")
+        .attr("transform", "translate(" + 0 + "," + (chartHeight - yAxisHeight) + ")")
+        .call(xAxis)
+      .selectAll("text")
+        .attr("y", -5)
+        .attr("x", -28)
+        //.attr("dy", "0.35em")
+        .attr("transform", "rotate(-90)");
+
+    svg.select("#yAxis")
+        .attr("transform", "translate(" + xAxisWidth + "," + (0) + ")")
+        .call(yAxis);
 
     // Create the bars (hint: use #bars)
 

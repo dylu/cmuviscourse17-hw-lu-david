@@ -145,7 +145,7 @@ header {
 }
 
 #bar-chart {
-    background-color:#EEE;
+    background-color:#F6F6F6;
     float: left;
     width: 800px;
     margin-right: 20px;
@@ -162,6 +162,10 @@ header {
 
 #links > line {
     stroke: rgb(216, 216, 216);
+}
+
+#barChart {
+    background-color:#EEE;
 }
 
 #xAxis path,
