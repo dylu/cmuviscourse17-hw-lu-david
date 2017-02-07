@@ -178,11 +178,23 @@ function updateBarChart(selectedDimension)
             d3.select("#bars_tooltip").classed("hidden", true);
         })
         .on('click', function(d) {
+            var nodeSelection = d3.select(this)
+                .transition().duration(trans_dur/16)
+                .style("fill", "#BBB")
+                .on("end", function() {
+                    d3.select(this)
+                    .transition().duration(trans_dur/4)
+                    .style("fill", function(d) {
+                        return hover_colorScale(d[selectedDimension]);
+                    });
+                });
             console.log("Selected the " + d.year + " value for " + 
                 [selectedDimension] + ", " + d[selectedDimension]);
         });
 
+    function callback() {
 
+    };
     // var tooltip = d3.select("body");
 
     // tooltip = tooltip.enter()
