@@ -1,6 +1,14 @@
 // Global var for FIFA world cup data
 var allWorldCupData;
 
+
+/**
+ * Helper function to capitalize words. (Purely for aesthetics.)
+ */
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 /**
  * Render and update the bar chart based on the selection of the data type in the drop-down box
  *
@@ -144,14 +152,14 @@ function updateBarChart(selectedDimension)
 
             // fine tuning
             var xAdj = 16;
-            var yAdj = 24 + headerOffset;
+            var yAdj = 26 + headerOffset;
             
             var tt = d3.select("#bars_tooltip")
                 .style("left", (curr_loc[0] + xAdj) + "px")
                 .style("top", (curr_loc[1] + yAdj) + "px");
 
             tt.select("#title")
-                .text([selectedDimension] + " " + d.year + ":");
+                .text(capitalize([selectedDimension].toString()) + " " + d.year + ":");
             tt.select("#value")
                 .text(d[selectedDimension]);
 
