@@ -8,6 +8,7 @@ var allWorldCupData;
  */
 function updateBarChart(selectedDimension)
 {
+    var temp = "d." + [selectedDimension];
     // var data = allWorldCupData;
     // var data = [30, 80, 10, 40, 120, 130, 20, 120, 820, 40, 20, 30];
     var height = 400;
@@ -20,16 +21,18 @@ function updateBarChart(selectedDimension)
         xAxisWidth = 100,
         yAxisHeight = 70;
 
-    // padding size between bars.
-    // chartWidth prevents cutting off on the far right.
-    var padding = 1;
-    var chartWidth = width*24/25;
-
     // ******* TODO: PART I *******
 
     // Create the x and y scales; make
     // sure to leave room for the axes
 
+    console.log(temp);
+    // console.log(d[selectedDimension]);
+
+    // var minYear = d3.min(allWorldCupData, function(d){ return d.year; });
+    // var maxYear = d3.max(allWorldCupData, function(d){ return d.year; });
+    // var minAttendance = d3.max(allWorldCupData, function(d){ return d.attendance; });
+    // var maxAttendance = d3.max(allWorldCupData, function(d){ return d.attendance; });
     var minXval = d3.min(allWorldCupData, function(d){ return d.year; });
     var maxXval = d3.max(allWorldCupData, function(d){ return d.year; });
     var minYval = d3.min(allWorldCupData, function(d){ return d[selectedDimension]; });
@@ -46,11 +49,13 @@ function updateBarChart(selectedDimension)
 
     // console.log(allWorldCupData);
 
+    //TODO:
+    // d3.scaleBand();
     var xScale = d3.scaleBand()
         .domain(years)
-        .range([0, chartWidth])
-        .paddingInner(0.8)
-        .paddingOuter(0.1);
+        .range([0, svgBounds.width])
+        .padding(0.1)
+        .paddingInner(0.1);
 
     var yScale = d3.scaleLinear()
         .domain([0, maxYval])
@@ -59,7 +64,7 @@ function updateBarChart(selectedDimension)
     // Create colorScale
     var colorScale = d3.scaleLinear()
         .domain([0, maxYval])
-        .range(["#90CAF9", "#1565C0"]);     // Blue 200 - 800
+        .range(["lightgray", "black"]);
 
     // Create the axes (hint: use #xAxis and #yAxis)
     var xAxis = d3.axisBottom();
@@ -79,16 +84,16 @@ function updateBarChart(selectedDimension)
             return xScale(d.year);
         })
         .attr("y", function(d, i) {
-            return yScale(d[selectedDimension]);
+            return yScale(eval(temp));
         })
         .attr("width", function (d) {
-            return (chartWidth / allWorldCupData.length);
+            return svgBounds.width / allWorldCupData.length;
         })
         .attr("height", function (d) {
-            return svgBounds.height - yScale(d[selectedDimension]);
+            return svgBounds.height - yScale(eval(temp));
         })
         .style("fill", function(d) {
-            return colorScale(d[selectedDimension]);
+            return colorScale(eval(temp));
         });
 
     // ******* TODO: PART II *******
