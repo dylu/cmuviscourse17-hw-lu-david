@@ -190,7 +190,7 @@ function updateBarChart(selectedDimension)
                     "<b>" + 
                     capitalize([selectedDimension].toString()) + ", " +
                     d.year + 
-                    "</b>  &ndash;  " +
+                    "</b> : &nbsp; " +
                     d[selectedDimension]);
 
             d3.select("#selectionTitle").classed("hidden", false);
