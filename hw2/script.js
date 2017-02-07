@@ -9,6 +9,7 @@ var allWorldCupData;
 function updateBarChart(selectedDimension)
 {
     var headerOffset = 100;     // header is 100 px.
+    var trans_dur = 1600;       // transition duration in ms.
 
     var height = 500;
     var width = 800;
@@ -81,6 +82,8 @@ function updateBarChart(selectedDimension)
     yAxis.scale(yScale);
 
     svg.select("#xAxis")
+        .transition()
+        .duration(trans_dur)
         .attr("transform", "translate(" + 0 + "," + (chartHeight - yAxisHeight) + ")")
         .call(xAxis)
       .selectAll("text")
@@ -90,6 +93,8 @@ function updateBarChart(selectedDimension)
         .attr("transform", "rotate(-90)");
 
     svg.select("#yAxis")
+        .transition()
+        .duration(trans_dur)
         .attr("transform", "translate(" + xAxisWidth + "," + (0) + ")")
         .call(yAxis);
 
@@ -103,7 +108,9 @@ function updateBarChart(selectedDimension)
 
     bars.exit().remove();
 
-    bars.attr("x", function(d) {
+    bars.transition()
+        .duration(trans_dur)
+        .attr("x", function(d) {
             return xScale(d.year);
         })
         .attr("y", function(d, i) {
@@ -117,14 +124,14 @@ function updateBarChart(selectedDimension)
         })
         .style("fill", function(d) {
             return colorScale(d[selectedDimension]);
-        })
+        });
         // .append("text")
         // .attr("fill", "white")
         // .text(function(d){
         //     // console.log(d[selectedDimension]);
         //     return d[selectedDimension];
         // })
-        .on('mouseover', function(d) {
+    bars.on('mouseover', function(d) {
             var nodeSelection = d3.select(this).style("fill", function(d) {
                 return hover_colorScale(d[selectedDimension]);
             });
