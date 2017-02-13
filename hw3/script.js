@@ -20,8 +20,11 @@ function updateBarChart(selectedDimension)
     var headerOffset = 120;     // header is 120px.
     var trans_dur = 1200;       // transition duration in ms.
 
-    var height = 500;
-    var width = 800;
+    // Temporary (?) offset (x value) for details tab.
+    var detailsXOffset = d3.select("#details").node().getBoundingClientRect().width;
+
+    var height = 480;
+    var width = 600;
     var svg = d3.select("svg");
     svg.attr("width", width)
         .attr("height", height);
@@ -141,8 +144,8 @@ function updateBarChart(selectedDimension)
             var curr_loc = d3.mouse(this);
 
             // fine tuning
-            var xAdj = 16;
-            var yAdj = 28 + headerOffset;
+            var xAdj = 20 + detailsXOffset;
+            var yAdj = 32 + headerOffset;
             
             var tt = d3.select("#bars_tooltip")
                 .style("left", (curr_loc[0] + xAdj) + "px")
