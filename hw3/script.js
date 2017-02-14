@@ -251,6 +251,23 @@ function drawMap(world) {
     // Draw the background (country outlines; hint: use #map)
     // Make sure and add gridlines to the map
 
+    // var bars = svg.select("#bars").selectAll("rect").data(allWorldCupData);
+
+    var map = d3.select("#map");
+
+    // map.append("path")
+    //     .datum(topojson.feature(world, world.objects.subunits))
+    //     .attr("d", d3.geo.path().projection(projection));
+    // console.log(world);
+
+    var path = d3.geoPath().projection(projection);
+
+    map.selectAll("path")
+        .data(topojson.feature(world, world.objects.countries).features)
+        .enter()
+        .append("path")
+        .attr("d", path);
+
     // Hint: assign an id to each country path to make it easier to select afterwards
     // we suggest you use the variable in the data element's .id field to set the id
 

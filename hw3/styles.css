@@ -151,8 +151,11 @@ header {
     font-size: 2em;
 }
 
-#bar-chart {
+.view_background {
     background-color:#F2F2F2;
+}
+
+#bar-chart {
     float: left;
     width: 600px;
     margin-right: 20px;
