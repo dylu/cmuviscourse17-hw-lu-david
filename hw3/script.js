@@ -1,6 +1,7 @@
 // Global var for FIFA world cup data
 var allWorldCupData;
 var selectedYear = 0;
+var trans_dur = 1200;       // transition duration in ms.
 
 /**
  * Helper function to capitalize words. (Purely for aesthetics.)
@@ -19,7 +20,6 @@ function updateBarChart(selectedDimension)
     // header changes based on window size, so hard coding for now.
     //var headerOffset = d3.select("header").node().getBoundingClientRect().height;
     var headerOffset = 120;     // header is 120px.
-    var trans_dur = 1200;       // transition duration in ms.
 
     // Temporary (?) offset (x value) for details tab.
     var detailsXOffset = d3.select("#details").node().getBoundingClientRect().width;
@@ -72,7 +72,7 @@ function updateBarChart(selectedDimension)
     // Hover Interaction.
     var hover_colorScale = d3.scaleLinear()
         .domain([0, maxYval])
-        .range(["#80DEEA", "#00838F"]);     // Cyan 200 - 800
+        .range(["#9FA8DA", "#3949AB"]);     // Cyan 200 - 800
 
     // Create the axes (hint: use #xAxis and #yAxis)
     var xAxis = d3.axisBottom();
@@ -119,6 +119,12 @@ function updateBarChart(selectedDimension)
         })
         .attr("height", function (d) {
             return (chartHeight - yAxisHeight) - yScale(d[selectedDimension]);
+        });
+
+    // Color is separate, to prevent selecting a new chart from overriding current selection.
+    bars.filter(function(d, i) {
+                    // Filtering 'selected' value to not change.
+                    return (!d3.select(this).classed("selected"));
         })
         .style("fill", function(d) {
             return colorScale(d[selectedDimension]);
@@ -151,8 +157,8 @@ function updateBarChart(selectedDimension)
             // fine tuning
             // var xAdj = 20 + detailsXOffset;
             // var yAdj = 32 + headerOffset;
-            var xAdj = 10;
-            var yAdj = -2;
+            var xAdj = -120;
+            var yAdj = 22;
             
             var tt = d3.select("#bars_tooltip")
                 .style("left", (curr_loc[0] + xAdj) + "px")
@@ -210,17 +216,6 @@ function updateBarChart(selectedDimension)
             
             nodeSelection.classed("selected", true);
 
-            // Outputting selection to selectionText.
-            d3.select("#selectionText").html(
-                    "<b>" + 
-                    capitalize([selectedDimension].toString()) + ", " +
-                    d.year + 
-                    "</b> : &nbsp; " +
-                    d[selectedDimension]);
-
-            d3.select("#selectionTitle").classed("hidden", false);
-            d3.select("#selectionText").classed("hidden", false);
-
             // Outputting selection to console.
             console.log("Selected the " + d.year + " value for " + 
                 [selectedDimension] + ", " + d[selectedDimension]);
@@ -239,9 +234,6 @@ function chooseData()
     // ******* TODO: PART I *******
     // Copy over your HW2 code here
     updateBarChart(d3.select("#dataset").node().value);
-
-    d3.select("#selectionTitle").classed("hidden", true);
-    d3.select("#selectionText").classed("hidden", true);
 }
 
 /**
@@ -260,6 +252,9 @@ function updateInfo(oneWorldCup) {
     // Hint: Select the appropriate ids to update the text content.
 
     // console.log(oneWorldCup);
+    d3.select("#edition")
+        .html(oneWorldCup.YEAR + " FIFA World Cup - " + oneWorldCup.host);
+
     d3.select("#host")
         .html(oneWorldCup.host);
 
@@ -309,15 +304,62 @@ function drawMap(world) {
 
     var path = d3.geoPath().projection(projection);
 
-    map.selectAll("path")
+    map = map.selectAll("path")
+        // .transition()
+        // .duration(trans_dur)
         .data(topojson.feature(world, world.objects.countries).features)
         .enter()
         .append("path")
+        .merge(map);
+
+        map
         .attr("d", path)
         .attr("id", function(d) {
             d.id;
         })
         .classed("countries", true);
+
+    console.log(world);
+
+    
+    map.on('mouseover', function(d) {
+            // No transition time on mouseover, to preserve responsiveness.
+            var nodeSelection = d3.select(this)
+                .style("z-index", "10")
+                .style("stroke", "#664486");
+
+            d3.select("#map_tooltip").classed("hidden", false);
+        })
+        // Tooltip follows mouse.
+        .on('mousemove', function(d) {
+
+            console.log(d);
+
+            var curr_loc = d3.mouse(this);
+
+            var xAdj = -52;
+            var yAdj = 16;
+            
+            var tt = d3.select("#map_tooltip")
+                .style("left", (curr_loc[0] + xAdj) + "px")
+                .style("top", (curr_loc[1] + yAdj) + "px");
+
+            tt.select("#title_map")
+                .text( d.id + ":");
+            tt.select("#value_map")
+                .text("test");
+
+            tt.classed("hidden", false);
+        })
+        // Original bar color restored.
+        .on('mouseout', function(d) {
+            var nodeSelection = d3.select(this)
+                .transition().duration(trans_dur/4)
+                .style("z-index", "-10")
+                .style("stroke", "#f7f7f7");
+            
+            d3.select("#map_tooltip").classed("hidden", true);
+        });
 
     // console.log(allWorldCupData);
     // console.log(world);
@@ -440,22 +482,6 @@ function updateMap(worldcupData) {
         .classed("silver", function(d) {
             return d == rup_loc;
         });
-
-
-        // .selectAll("path")
-        // .data(topojson.feature(world, world.objects.countries).features)
-        // .enter()
-        // .append("path")
-        // .attr("d", path)
-        // .attr("id", function(d) {
-        //     d.id;
-        // })
-        // .classed("countries", true);
-
-        // <circle class="gold" cx="176" cy="12" r="8"></circle>
-        // <text x="188" y="18">Winner</text>
-        // <circle class="silver" cx="258" cy="12" r="8"></circle>
-        // <text x="270" y="18">Runner-Up</text>
 
 }
 

@@ -184,6 +184,10 @@ header {
     background-color: #F2F2F2;
 }
 
+#details {
+    white-space: normal;
+}
+
 #bar-chart {
     float: left;
     left: 234px;
@@ -243,7 +247,7 @@ header {
     display: none;
 }
 
-#bars_tooltip {
+.svg_tooltip {
     opacity: 0.92;
     position: absolute;
     width: auto;
@@ -255,13 +259,14 @@ header {
     box-shadow: .2em .2em .6em rgba(0, 0, 0, 0.2);
 }
 
-#bars_tooltip span {
+.svg_tooltip span {
     margin: 0;
     font-family: sans-serif;
     font-size: 1em;
     line-height: 1.2em;
 }
-#bars_tooltip #title {
+.svg_tooltip #title,
+.svg_tooltip #title_map{
     font-weight: bold;
 }
 
