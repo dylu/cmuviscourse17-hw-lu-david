@@ -306,6 +306,9 @@ function drawMap(world) {
 
     projection = d3.geoConicConformal().scale(150).translate([400, 350]);
 
+    // var graticule = d3.geoGraticule().step([10, 10]);
+    var graticule = d3.geoGraticule();
+
     // ******* TODO: PART III *******
 
     // Draw the background (country outlines; hint: use #map)
@@ -330,14 +333,13 @@ function drawMap(world) {
         .append("path")
         .merge(map);
 
-        map
-        .attr("d", path)
+    map.attr("d", path)
         .attr("id", function(d) {
             d.id;
         })
         .classed("countries", true);
 
-    console.log(world);
+    // console.log(world);
 
     
     map.on('mouseover', function(d) {
@@ -351,7 +353,7 @@ function drawMap(world) {
         // Tooltip follows mouse.
         .on('mousemove', function(d) {
 
-            console.log(d);
+            // console.log(d);
 
             var curr_loc = d3.mouse(this);
 
@@ -378,6 +380,31 @@ function drawMap(world) {
             
             d3.select("#map_tooltip").classed("hidden", true);
         });
+
+
+    var gr_lines = d3.select("#map");
+
+    gr_lines = gr_lines.selectAll("path.graticule")
+        .data(graticule.lines())
+        .enter()
+        .append("path")
+        .classed("graticule", true)
+        .merge(gr_lines);
+
+    gr_lines.attr("d", path);
+
+    // gr_lines.selectAll("graticule").data([graticule]);
+    // gr_lines.attr("d", path);
+    gr_lines.exit().remove();
+
+
+    map = map.selectAll("path")
+        // .transition()
+        // .duration(trans_dur)
+        .data(topojson.feature(world, world.objects.countries).features)
+        .enter()
+        .append("path")
+        .merge(map);
 
     // console.log(allWorldCupData);
     // console.log(world);
@@ -420,7 +447,7 @@ function clearMap() {
  */
 function updateMap(worldcupData) {
 
-    console.log(worldcupData);
+    // console.log(worldcupData);
 
     //Clear any previous selections;
     clearMap();
