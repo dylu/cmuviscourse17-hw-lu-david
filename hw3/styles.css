@@ -227,9 +227,10 @@ header {
 
 .graticule {
     fill: none;
-    stroke: #222;
+    stroke: #363636;
     stroke-width: 1;
-    stroke-dasharray: 1,1;
+    /*stroke-dasharray: 1,1;*/
+    opacity: 0.16;
 }
 
 
