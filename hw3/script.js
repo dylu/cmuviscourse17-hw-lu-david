@@ -1,5 +1,6 @@
 // Global var for FIFA world cup data
 var allWorldCupData;
+var selectedYear = 0;
 
 /**
  * Helper function to capitalize words. (Purely for aesthetics.)
@@ -71,7 +72,7 @@ function updateBarChart(selectedDimension)
     // Hover Interaction.
     var hover_colorScale = d3.scaleLinear()
         .domain([0, maxYval])
-        .range(["#B39DDB", "#4527A0"]);     // Deep Purple 200 - 800
+        .range(["#80DEEA", "#00838F"]);     // Cyan 200 - 800
 
     // Create the axes (hint: use #xAxis and #yAxis)
     var xAxis = d3.axisBottom();
@@ -133,6 +134,10 @@ function updateBarChart(selectedDimension)
     bars.on('mouseover', function(d) {
             // No transition time on mouseover, to preserve responsiveness.
             var nodeSelection = d3.select(this)
+                .filter(function(d, i) {
+                    // Filtering 'selected' value to not change.
+                    return (!d3.select(this).classed("selected"));
+                })
                 .style("fill", function(d) {
                 return hover_colorScale(d[selectedDimension]);
             });
@@ -144,8 +149,10 @@ function updateBarChart(selectedDimension)
             var curr_loc = d3.mouse(this);
 
             // fine tuning
-            var xAdj = 20 + detailsXOffset;
-            var yAdj = 32 + headerOffset;
+            // var xAdj = 20 + detailsXOffset;
+            // var yAdj = 32 + headerOffset;
+            var xAdj = 10;
+            var yAdj = -2;
             
             var tt = d3.select("#bars_tooltip")
                 .style("left", (curr_loc[0] + xAdj) + "px")
@@ -162,6 +169,10 @@ function updateBarChart(selectedDimension)
         // Original bar color restored.
         .on('mouseout', function(d) {
             var nodeSelection = d3.select(this)
+                .filter(function(d, i) {
+                    // Filtering 'selected' value to not change.
+                    return (!d3.select(this).classed("selected"));
+                })
                 .transition().duration(trans_dur/4)
                 .style("fill", function(d) {
                 return colorScale(d[selectedDimension]);
@@ -171,16 +182,33 @@ function updateBarChart(selectedDimension)
         })
         // Log + Display selected bar data.
         .on('click', function(d) {
-            var nodeSelection = d3.select(this)
+
+            // Reset old 'selected' value.
+            d3.selectAll(".selected")
+                .transition()
+                .duration(trans_dur/4)
+                .style("fill", function(d) {
+                    return colorScale(d[selectedDimension]);
+                });
+            d3.selectAll(".selected").classed("selected", false);
+
+            // selectedYear = d.year;
+            updateInfo(d);
+            clearMap();
+            updateMap(d);
+
+            var nodeSelection = d3.select(this);
+
+            nodeSelection
                 .transition().duration(trans_dur/16)
                 .style("fill", "#CCC")
                 .on("end", function() {
                     d3.select(this)
                     .transition().duration(trans_dur/4)
-                    .style("fill", function(d) {
-                        return hover_colorScale(d[selectedDimension]);
-                    });
+                    .style("fill", "#5E35B1");
                 });
+            
+            nodeSelection.classed("selected", true);
 
             // Outputting selection to selectionText.
             d3.select("#selectionText").html(
@@ -231,7 +259,26 @@ function updateInfo(oneWorldCup) {
     // Hint: For the list of teams, you can create an list element for each team.
     // Hint: Select the appropriate ids to update the text content.
 
+    // console.log(oneWorldCup);
+    d3.select("#host")
+        .html(oneWorldCup.host);
 
+    d3.select("#winner")
+        .html(oneWorldCup.winner);
+
+    d3.select("#silver")
+        .html(oneWorldCup.runner_up);
+
+    d3.select("#teams")
+        .html("")           // reset the html first.
+        .append("ul")
+        .selectAll("li")
+        .data(oneWorldCup.teams_names)
+        .enter()
+        .append("li")
+        .text(function(d) {
+            return d;
+        });
 }
 
 /**
@@ -266,7 +313,14 @@ function drawMap(world) {
         .data(topojson.feature(world, world.objects.countries).features)
         .enter()
         .append("path")
-        .attr("d", path);
+        .attr("d", path)
+        .attr("id", function(d) {
+            d.id;
+        })
+        .classed("countries", true);
+
+    // console.log(allWorldCupData);
+    // console.log(world);
 
     // Hint: assign an id to each country path to make it easier to select afterwards
     // we suggest you use the variable in the data element's .id field to set the id
@@ -290,6 +344,13 @@ function clearMap() {
     //the colors and markers for hosts/teams/winners, you can use
     //d3 selection and .classed to set these classes on and off here.
 
+    d3.select("#map").selectAll("path")
+        .classed("host", false)
+        .classed("team", false)
+        .classed("gold", false)
+        .classed("silver", false)
+        .classed("countries", true);
+
 }
 
 
@@ -298,6 +359,8 @@ function clearMap() {
  * @param the data for one specific world cup
  */
 function updateMap(worldcupData) {
+
+    console.log(worldcupData);
 
     //Clear any previous selections;
     clearMap();
@@ -317,7 +380,82 @@ function updateMap(worldcupData) {
 
     //We strongly suggest using classes to style the selected countries.
 
+    // var win_loc;
+    //     win_loc.lon = +worldcupData.WIN_LON;
+    //     win_loc.lat = +worldcupData.WIN_LAT;
 
+    // var rup_loc;
+    //     rup_loc.lon = +worldcupData.RUP_LON;
+    //     rup_loc.lat = +worldcupData.RUP_LAT;
+
+    // var loc_data = [win_loc, rup_loc];
+
+    var win_loc = [+worldcupData.WIN_LON, +worldcupData.WIN_LAT];
+    var rup_loc = [+worldcupData.RUP_LON, +worldcupData.RUP_LAT];
+
+    // console.log("Win Location = " + win_loc);
+    // console.log("Rup Location = " + rup_loc);
+    // console.log("Location Data = " + loc_data);
+
+    var map = d3.select("#map");
+
+    map.selectAll("path")
+        .classed("host", function(d)
+        {
+            if (d.id == worldcupData.host_country_code)
+            {
+                return true;
+            }
+            return false;
+        })
+        .classed("team", function(d)
+        {
+            if (worldcupData.TEAM_LIST.includes(d.id))
+            {
+                return true;
+            }
+            return false;
+        });
+
+    // Remove all previous circles.
+    map.selectAll("circle").remove();
+
+    map.selectAll("circle")
+        .data([win_loc, rup_loc])
+        .enter()
+        .append("circle")
+        // .attr("name", worldcupData.winner)
+        .attr("cx", function(d) {
+            return projection(d)[0];
+        })
+        .attr("cy", function(d) {
+            return projection(d)[1];
+        })
+        .attr("r", "6px")
+        .classed("gold", function(d) {
+            // console.log("hello");
+            // console.log(d);
+            return d == win_loc;
+        })
+        .classed("silver", function(d) {
+            return d == rup_loc;
+        });
+
+
+        // .selectAll("path")
+        // .data(topojson.feature(world, world.objects.countries).features)
+        // .enter()
+        // .append("path")
+        // .attr("d", path)
+        // .attr("id", function(d) {
+        //     d.id;
+        // })
+        // .classed("countries", true);
+
+        // <circle class="gold" cx="176" cy="12" r="8"></circle>
+        // <text x="188" y="18">Winner</text>
+        // <circle class="silver" cx="258" cy="12" r="8"></circle>
+        // <text x="270" y="18">Runner-Up</text>
 
 }
 

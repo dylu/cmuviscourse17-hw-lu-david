@@ -71,7 +71,8 @@ header h1 {
 }
 
 .selected {
-    fill: #d20a11;
+    /*fill: #d20a11;*/
+    fill: #5E35B1;
 }
 
 /*Map grid style*/
@@ -118,15 +119,20 @@ h3 {
 }
 
 header {
+    position: relative;
     padding: 0.5em;
     clear: left;
     text-align: left;
     height: 120px;
     font-size: 2em;
+    /*width: 100%;*/
 }
 
 #logo {
-    float: right;
+    position: absolute;
+    right: 10px;
+    /*float: right;*/
+    /*text-align: right;*/
     height: 100px;
 }
 
@@ -140,6 +146,27 @@ header {
     border-right-style: solid;
 }
 
+#details h3 {
+    padding: 0.42em 0.2em 0.1em 0.2em;
+}
+
+#details span {
+    padding: 0em 0em 0em 0.6em;
+}
+
+/* Not sure why, but lists react badly with this */
+#details #teams {
+    padding: 0em;
+}
+
+#details ul, li {
+    font-size: 1em;
+}
+
+#details ul {
+    padding: 0.02em 0.2em 0.02em 1.6em;   /* Top | Right | Bottom | Left */
+}
+
 #plot-selector {
     float: right;
     margin-bottom: 5px;
@@ -147,35 +174,55 @@ header {
 }
 
 .view {
+    position: absolute;
+    white-space: nowrap;
     padding: 0.5em;
     font-size: 2em;
 }
 
 .view_background {
-    background-color:#F2F2F2;
+    background-color: #F2F2F2;
 }
 
 #bar-chart {
     float: left;
+    left: 234px;
     width: 600px;
+    height: 540px;
     margin-right: 20px;
-
-}
-
-#world-map {
-    float: left;
-    border-width: 1px;
-    border-color: #d9d9d9;
-    border-left-style: solid;
-}
-
-
-#links > line {
-    stroke: rgb(216, 216, 216);
 }
 
 #barChart {
-    background-color:#FAFAFA;
+    position: relative;
+    top: 28px;
+    background-color: #FAFAFA;
+}
+
+#map-view {
+    white-space: normal;
+    position: relative;
+    float: left;
+    left: 840px;
+    border-width: 1px;
+    padding: 0em 0.2em 0.1em 1.6em;
+    border-color: #d9d9d9;
+    border-left-style: solid;
+    height: 660px;
+}
+
+#map-view svg {
+    position: absolute;
+}
+
+#map-view #map-svg {
+    position: relative;
+    top: 26px;
+    background-color: #FAFAFA;
+    /*background-color: red;*/
+}
+
+#links > line {
+    stroke: rgb(216, 216, 216);
 }
 
 #xAxis path,
