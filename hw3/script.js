@@ -306,28 +306,17 @@ function drawMap(world) {
 
     projection = d3.geoConicConformal().scale(150).translate([400, 350]);
 
-    // var graticule = d3.geoGraticule().step([10, 10]);
-    var graticule = d3.geoGraticule();
+    var graticule = d3.geoGraticule().step([15, 15]);
 
     // ******* TODO: PART III *******
 
     // Draw the background (country outlines; hint: use #map)
     // Make sure and add gridlines to the map
 
-    // var bars = svg.select("#bars").selectAll("rect").data(allWorldCupData);
-
     var map = d3.select("#map");
-
-    // map.append("path")
-    //     .datum(topojson.feature(world, world.objects.subunits))
-    //     .attr("d", d3.geo.path().projection(projection));
-    // console.log(world);
-
     var path = d3.geoPath().projection(projection);
 
     map = map.selectAll("path")
-        // .transition()
-        // .duration(trans_dur)
         .data(topojson.feature(world, world.objects.countries).features)
         .enter()
         .append("path")
@@ -338,22 +327,18 @@ function drawMap(world) {
             d.id;
         })
         .classed("countries", true);
-
-    // console.log(world);
-
     
     map.on('mouseover', function(d) {
             // No transition time on mouseover, to preserve responsiveness.
             var nodeSelection = d3.select(this)
                 .style("stroke", "#664486")
+                .style("opacity", "0.76")
                 .moveToFront();
 
             d3.select("#map_tooltip").classed("hidden", false);
         })
         // Tooltip follows mouse.
         .on('mousemove', function(d) {
-
-            // console.log(d);
 
             var curr_loc = d3.mouse(this);
 
@@ -375,39 +360,28 @@ function drawMap(world) {
         .on('mouseout', function(d) {
             var nodeSelection = d3.select(this)
                 .moveToBack()
-                .transition().duration(trans_dur/4)
-                .style("stroke", "#f7f7f7");
+                .style("stroke", "#f7f7f7")
+                .style("opacity", "1");
             
             d3.select("#map_tooltip").classed("hidden", true);
         });
 
+    map.exit().remove();
 
-    var gr_lines = d3.select("#map");
 
-    gr_lines = gr_lines.selectAll("path.graticule")
+    var gr_lines = d3.select("#graticule_overlay");
+
+    gr_lines = gr_lines.selectAll("path")
         .data(graticule.lines())
         .enter()
         .append("path")
-        .classed("graticule", true)
         .merge(gr_lines);
 
-    gr_lines.attr("d", path);
+    gr_lines.attr("d", path)
+        .classed("graticule", true);
 
-    // gr_lines.selectAll("graticule").data([graticule]);
-    // gr_lines.attr("d", path);
     gr_lines.exit().remove();
 
-
-    map = map.selectAll("path")
-        // .transition()
-        // .duration(trans_dur)
-        .data(topojson.feature(world, world.objects.countries).features)
-        .enter()
-        .append("path")
-        .merge(map);
-
-    // console.log(allWorldCupData);
-    // console.log(world);
 
     // Hint: assign an id to each country path to make it easier to select afterwards
     // we suggest you use the variable in the data element's .id field to set the id
@@ -447,8 +421,6 @@ function clearMap() {
  */
 function updateMap(worldcupData) {
 
-    // console.log(worldcupData);
-
     //Clear any previous selections;
     clearMap();
 
@@ -467,22 +439,9 @@ function updateMap(worldcupData) {
 
     //We strongly suggest using classes to style the selected countries.
 
-    // var win_loc;
-    //     win_loc.lon = +worldcupData.WIN_LON;
-    //     win_loc.lat = +worldcupData.WIN_LAT;
-
-    // var rup_loc;
-    //     rup_loc.lon = +worldcupData.RUP_LON;
-    //     rup_loc.lat = +worldcupData.RUP_LAT;
-
-    // var loc_data = [win_loc, rup_loc];
 
     var win_loc = [+worldcupData.WIN_LON, +worldcupData.WIN_LAT];
     var rup_loc = [+worldcupData.RUP_LON, +worldcupData.RUP_LAT];
-
-    // console.log("Win Location = " + win_loc);
-    // console.log("Rup Location = " + rup_loc);
-    // console.log("Location Data = " + loc_data);
 
     var map = d3.select("#map");
 
@@ -511,7 +470,6 @@ function updateMap(worldcupData) {
         .data([win_loc, rup_loc])
         .enter()
         .append("circle")
-        // .attr("name", worldcupData.winner)
         .attr("cx", function(d) {
             return projection(d)[0];
         })
@@ -520,8 +478,6 @@ function updateMap(worldcupData) {
         })
         .attr("r", "6px")
         .classed("gold", function(d) {
-            // console.log("hello");
-            // console.log(d);
             return d == win_loc;
         })
         .classed("silver", function(d) {
