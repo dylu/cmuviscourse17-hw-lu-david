@@ -11,6 +11,24 @@ function capitalize(str) {
 }
 
 /**
+ * Helper functions for moving an element to the front/back.
+ * Source: https://github.com/wbkd/d3-extended
+ */
+d3.selection.prototype.moveToFront = function() {  
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
+};
+d3.selection.prototype.moveToBack = function() {  
+    return this.each(function() { 
+        var firstChild = this.parentNode.firstChild; 
+        if (firstChild) { 
+            this.parentNode.insertBefore(this, firstChild); 
+        } 
+    });
+};
+
+/**
  * Render and update the bar chart based on the selection of the data type in the drop-down box
  *
  * @param selectedDimension a string specifying which dimension to render in the bar chart
@@ -325,8 +343,8 @@ function drawMap(world) {
     map.on('mouseover', function(d) {
             // No transition time on mouseover, to preserve responsiveness.
             var nodeSelection = d3.select(this)
-                .style("z-index", "10")
-                .style("stroke", "#664486");
+                .style("stroke", "#664486")
+                .moveToFront();
 
             d3.select("#map_tooltip").classed("hidden", false);
         })
@@ -337,25 +355,25 @@ function drawMap(world) {
 
             var curr_loc = d3.mouse(this);
 
-            var xAdj = -52;
-            var yAdj = 16;
+            var xAdj = 6;
+            var yAdj = 96;
             
             var tt = d3.select("#map_tooltip")
                 .style("left", (curr_loc[0] + xAdj) + "px")
                 .style("top", (curr_loc[1] + yAdj) + "px");
 
             tt.select("#title_map")
-                .text( d.id + ":");
+                .text( d.id + "");
             tt.select("#value_map")
-                .text("test");
+                .text("");
 
             tt.classed("hidden", false);
         })
         // Original bar color restored.
         .on('mouseout', function(d) {
             var nodeSelection = d3.select(this)
+                .moveToBack()
                 .transition().duration(trans_dur/4)
-                .style("z-index", "-10")
                 .style("stroke", "#f7f7f7");
             
             d3.select("#map_tooltip").classed("hidden", true);
