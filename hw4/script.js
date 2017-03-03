@@ -47,6 +47,8 @@ var rank = {
 
 d3.json('data/fifa-matches.json',function(error,data){
     teamData = data;
+    console.log("teamData");
+    console.log(teamData);
     createTable();
     updateTable();
 })
@@ -70,11 +72,22 @@ d3.csv("data/fifa-tree.csv", function (error, csvData) {
  * Also calculates aggregate values of goals, wins, losses and total games as a function of country.
  *
  */
-function createTable() {
+function createTable()
+{
+    // ******* TODO: PART II *******
+    
+    tableElements = teamData;
 
-// ******* TODO: PART II *******
 
-// ******* TODO: PART V (Extra Credit) *******
+    // var scoreTable = svg.select("#matchTable").selectAll("tr").data(teamData);
+
+    // scoreTable = scoreTable.enter()
+    //     .append("tr")
+    //     .merge(bars);
+
+
+
+    // ******* TODO: PART V (Extra Credit) *******
 
 }
 
@@ -82,9 +95,93 @@ function createTable() {
  * Updates the table contents with a row for each element in the global variable tableElements.
  *
  */
-function updateTable() {
+function updateTable()
+{
+    // ******* TODO: PART III *******
 
-// ******* TODO: PART III *******
+    console.log("tableElements: ");
+    console.log(tableElements);
+
+    console.log("teamData");
+    console.log(teamData);
+
+    var scoreTable = d3.select("#matchTable").select("tbody");
+
+    var tableRows = 
+        scoreTable.selectAll("tr")
+        .data(teamData)
+        .enter()
+        .append("tr");
+        // .merge(tableRows);
+
+    // tableRows.exit().remove();
+
+    var tableElements = 
+        tableRows.selectAll("td")
+        // d3.select("#matchTable").select("tbody").selectAll("tr").selectAll("td")
+        .data(function(d) {
+            // console.log(d);
+            // console.log(d.value["Goals Made"]);
+            // return d.value["Goals Made"];
+            // return d;
+
+            var cellData = new Object();
+            cellData.type = d.value["type"];
+            cellData.vis = "goals";
+            // cellData.value = "howtf";
+            cellData.value = Math.floor(Math.random() * 101);
+
+            // console.log(cellData);
+
+            // return cellData;
+
+            return teamData.map(function(col){
+                return {column: col, value: 2};
+            });
+        })
+        .enter()
+        .append("td")
+        .text("2");
+        // .merge(tableElements);
+
+    // tableElements.exit().remove();
+
+    // tableElements
+        // .html(function(d) {
+        //     return "hello";
+        // })
+        // .attr();
+        // .text(function (d) {
+        //     return "hello";
+        // })
+        ;
+        // .enter()
+        // .append("tr")
+        // .selectAll("td")
+        // .data(function(d) {
+        //     console.log("Hello");
+        // });
+
+    console.log("--------------------------------------");
+    // console.log("TR");
+    // console.log(tableRows);
+    // console.log("TD");
+    // console.log(tableElements);
+
+    console.log("d3.selectAll(\"td\")");
+    console.log(d3.selectAll("td").filter(function(d){
+        return true;
+    }));
+
+
+    // var bars = svg.select("#bars").selectAll("rect").data(allWorldCupData);
+
+    // bars = bars.enter()
+    //     .append("rect")
+    //     .merge(bars);
+
+    // bars.exit().remove();
+
 
 };
 

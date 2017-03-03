@@ -1,3 +1,33 @@
+html, body
+{
+    /* Adjusts font-size to be managable via 'em' values. */
+    font-size: 62.5%;
+
+    /* Adjusts margins and padding. (a mini 'css reset') */
+    margin: 0px;
+    padding: 0px;
+    vertical-align: baseline;
+}
+
+h1, h2, h3, p, ul, li
+{
+    font-size: 1.4em;
+    margin: 0em;
+    padding: 0em;
+    vertical-align: baseline;
+}
+
+
+body
+{
+    background-color: #FFF;
+}
+
+header, body
+{
+    padding-left: 2em;
+}
+
 
 table {
     border-collapse: collapse;
@@ -68,12 +98,17 @@ tbody tr .game {
 }
 
 h1 {
+    /*font-size: 3em;*/
+    font-size: 5.6em;
     margin-top: 0;
+    margin-bottom: 0.2em;
     font-family: 'brazil';
     color: #317f19;
 }
 
 h2 {
+    /*font-size: 2em;*/
+    font-size: 3.6em;
     font-family: 'brazil';
     color: #317f19;
     padding-bottom: 0;
@@ -82,8 +117,14 @@ h2 {
 }
 
 h3 {
+    /*font-size: 1.6em;*/
+    font-size: 3.2em;
     padding-bottom: 0px;
     margin-bottom: 0px;
+}
+
+p {
+    font-size: 2.6em;
 }
 
 * {
@@ -95,6 +136,7 @@ header {
     /*clear: left;*/
     text-align: center;
     height: 100px;
+    /*font-size: 2em;*/
 }
 
 #logo {
