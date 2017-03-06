@@ -75,6 +75,32 @@ d3.csv("data/fifa-tree.csv", function (error, csvData) {
 function createTable()
 {
     // ******* TODO: PART II *******
+
+    var xScale = d3.scaleBand()
+        .domain([0, 10])
+        .range([0, 10])
+        // .paddingInner(0.1)
+        // .paddingOuter(0.12);
+
+    var xAxis = d3.axisTop();
+    xAxis.scale(goalScale);//.ticks(20);
+
+    d3.select("#goalHeader")
+        .append("svg")
+        .attr("width", 2*cellWidth)
+        .attr("height", cellHeight)
+        .append("g")
+        // .attr("y", 45)
+        .attr("transform", "translate(0, "+ (cellHeight-4) +")")
+        // .transition()
+        // .duration(trans_dur)
+        // .attr("transform", "translate(" + 0 + "," + (chartHeight - yAxisHeight) + ")")
+        .call(xAxis);
+      // .selectAll("*")
+        // .attr("y", 15);
+        // .attr("x", -28)
+        // .attr("transform", "rotate(-90)");
+        // .attr("transform", "translate(0, -10)");
     
     tableElements = teamData;
 
