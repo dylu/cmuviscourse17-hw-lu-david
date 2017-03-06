@@ -263,7 +263,95 @@ function updateTable()
     tableCells.filter(function(d) {
             return d.vis == "goals";
         })
-        .text("goal cell");
+        // .text("goal cell");
+        .append("svg")
+        .attr("width", cellWidth*2)
+        .attr("height", cellHeight)
+        .append("g")
+        .append("rect")
+        .attr("x", function(d) {
+            return goalScale(Math.min(d.value.made, d.value.conceded));
+        })
+        .attr("y", function(d) {
+            return barHeight/6;
+        })
+        .attr("width", function (d) {
+            if (d.value.delta == 0)
+            {
+                return 0;
+            }
+            return goalScale(Math.abs(d.value.delta)-2);
+        })
+        .attr("height", barHeight*13/18)
+        .style("fill", function(d) {
+            // console.log("d.value");
+            // console.log(d.value);
+            // console.log(aggregateColorScale(d.value/aggregateMax));
+            return goalColorScale(d.value.delta);
+        })
+        .classed("goalBar", true);
+
+        // .attr("cx", function (d) {
+        //     return goalScale(d.value.made);
+        // })
+        // .attr("cy", barHeight/2)
+        // .attr("r", barHeight*13/36)
+        // // .style("fill", function(d) {
+        // //     console.log("d.value");
+        // //     console.log(d.value);
+        // //     console.log(aggregateColorScale(d.value/aggregateMax));
+        // //     return aggregateColorScale(d.value/aggregateMax);
+        // // });
+        // .style("fill", "blue");
+
+    tableCells.filter(function(d) {
+            return d.vis == "goals";
+        })
+        .selectAll("g")
+        .append("circle")
+        .attr("cx", function (d) {
+            return goalScale(d.value.made);
+        })
+        .attr("cy", barHeight/2 + barHeight/36)
+        .attr("r", barHeight*13/36)
+        // .style("fill", function(d) {
+        //     console.log("d.value");
+        //     console.log(d.value);
+        //     console.log(aggregateColorScale(d.value/aggregateMax));
+        //     return aggregateColorScale(d.value/aggregateMax);
+        // });
+        .style("fill", function(d) {
+            if (d.value.delta == 0)
+            {
+                return "grey";
+            }
+            return "blue";
+        });
+
+    tableCells.filter(function(d) {
+            return d.vis == "goals";
+        })
+        .selectAll("g")
+        .append("circle")
+        .attr("cx", function (d) {
+            return goalScale(d.value.conceded);
+        })
+        .attr("cy", barHeight/2 + barHeight/36)
+        .attr("r", barHeight*13/36)
+        // .style("fill", function(d) {
+        //     console.log("d.value");
+        //     console.log(d.value);
+        //     console.log(aggregateColorScale(d.value/aggregateMax));
+        //     return aggregateColorScale(d.value/aggregateMax);
+        // });
+        .style("fill", function(d) {
+            if (d.value.delta == 0)
+            {
+                return "grey";
+            }
+            return "red";
+        });
+
 
     // Bar Cells | Wins, Losses, Total Games.
     tableCells.filter(function(d) {
@@ -280,11 +368,56 @@ function updateTable()
         })
         .attr("height", barHeight)
         .style("fill", function(d) {
-            console.log("d.value");
-            console.log(d.value);
-            console.log(aggregateColorScale(d.value/aggregateMax));
+            // console.log("d.value");
+            // console.log(d.value);
+            // console.log(aggregateColorScale(d.value/aggregateMax));
             return aggregateColorScale(d.value/aggregateMax);
         });
+
+    tableCells.filter(function(d) {
+            return d.vis == "bar";
+        })
+        // .text("bar cell")
+        .selectAll("svg")
+        .append("text")
+        .text(function(d) {
+            if (d.value <= 1)
+                return "";
+            return d.value;
+        })
+        // .attr("x", 10)
+        .attr("y", cellHeight/2 + 4)
+        // .attr("y", 10)
+        .attr("dx", function(d) {
+            // if (d.value <= 1)
+            //     return "10px";
+            return "-4px";
+        })
+        .attr("text-anchor", "end")
+        .attr("x", function(d) {
+            return gameScale(d.value/aggregateMax);
+        })
+        .style("fill", function(d) {
+            // if (d.value <= 1)
+            //     return "grey";
+            return "white";
+        });
+
+    // tableCells.filter(function(d) {
+    //         return d.vis == "bar";
+    //     })
+    //     // .text("bar cell")
+    //     .selectAll("svg")
+    //     .append("rect")
+    //     .text(function(d) {
+    //         console.log(d.value);
+    //         return "test";
+    //     })
+    //     .attr("width", function (d) {
+    //         return gameScale(d.value/aggregateMax)/2;
+    //     })
+    //     .attr("height", barHeight)
+    //     .style("fill", "black");
         // .attr("transform", "translate(0, "+ (cellHeight-4) +")");;
 
         // .attr("x", function(d) {
