@@ -15,6 +15,8 @@ var cellWidth = 70,
 var goalsMadeHeader = 'Goals Made',
     goalsConcededHeader = 'Goals Conceded';
 
+var goalsMax = 0;
+
 /** Setup the scales*/
 var goalScale = d3.scaleLinear()
     .range([cellBuffer, 2 * cellWidth - cellBuffer]);
@@ -27,6 +29,8 @@ var gameScale = d3.scaleLinear()
 /**For aggregate columns*/
 var aggregateColorScale = d3.scaleLinear()
     .range(['#ece2f0', '#016450']);
+
+var aggregateMax = 0;
 
 /**For goal Column*/
 var goalColorScale = d3.scaleQuantize()
@@ -47,10 +51,25 @@ var rank = {
 
 d3.json('data/fifa-matches.json',function(error,data){
     teamData = data;
-    console.log("teamData");
-    console.log(teamData);
+    tableElements = data;
+
+    console.log("data | teamData | tableElements");
+    console.log(data);
+    // console.log(teamData);
+    // console.log(tableElements);
+
+    // Could have just put '18,' but this is better in case data changes.
+    teamData.forEach(function(dataElement) {
+        goalsMax = Math.max(goalsMax, dataElement.value["Goals Conceded"]);
+        goalsMax = Math.max(goalsMax, dataElement.value["Goals Made"]);
+    });
+
+    goalScale = d3.scaleLinear()
+        .domain([0, goalsMax])
+        .range([cellBuffer, 2 * cellWidth - cellBuffer]);
+
     createTable();
-    updateTable();
+    // updateTable();
 })
 
 /**
@@ -76,12 +95,6 @@ function createTable()
 {
     // ******* TODO: PART II *******
 
-    var xScale = d3.scaleBand()
-        .domain([0, 10])
-        .range([0, 10])
-        // .paddingInner(0.1)
-        // .paddingOuter(0.12);
-
     var xAxis = d3.axisTop();
     xAxis.scale(goalScale);//.ticks(20);
 
@@ -102,7 +115,8 @@ function createTable()
         // .attr("transform", "rotate(-90)");
         // .attr("transform", "translate(0, -10)");
     
-    tableElements = teamData;
+
+    // tableElements = teamData;
 
 
     // var scoreTable = svg.select("#matchTable").selectAll("tr").data(teamData);
@@ -115,6 +129,10 @@ function createTable()
 
     // ******* TODO: PART V (Extra Credit) *******
 
+
+
+    // Ensuring synchronous calls.
+    updateTable();
 }
 
 /**
@@ -142,7 +160,10 @@ function updateTable()
 
     // tableRows.exit().remove();
 
-    var tableElements = 
+    var teamNameData, goalData, roundData, winData, lossData, totalData;
+    var goalSubData;
+
+    var tableCells = 
         tableRows.selectAll("td")
         // d3.select("#matchTable").select("tbody").selectAll("tr").selectAll("td")
         .data(function(d) {
@@ -151,53 +172,154 @@ function updateTable()
             // return d.value["Goals Made"];
             // return d;
 
-            var cellData = new Object();
-            cellData.type = d.value["type"];
-            cellData.vis = "goals";
-            // cellData.value = "howtf";
-            cellData.value = Math.floor(Math.random() * 101);
+            // cellData = new Object();
+            // cellData.type = d.value["type"];
+            // cellData.vis = "goals";
+            // // // cellData.value = "howtf";
+            // cellData.value = Math.floor(Math.random() * 101);
 
-            // console.log(cellData);
+            teamNameData = new Object();
+            teamNameData.type = d.value["type"];    // aggregate?
+            teamNameData.vis = "text";
+            teamNameData.value = d.key;
 
-            // return cellData;
+            goalSubData = new Object();
+            goalSubData.made = d.value["Goals Made"];
+            goalSubData.conceded = d.value["Goals Conceded"];
+            goalSubData.delta = d.value["Delta Goals"];
 
-            return teamData.map(function(col){
-                return {column: col, value: 2};
-            });
+            goalData = new Object();
+            goalData.type = d.value["type"];
+            goalData.vis = "goals";
+            goalData.value = goalSubData;
+
+            roundData = new Object();
+            roundData.type = d.value["type"];
+            roundData.vis = "text";
+            roundData.value = d.value.Result.label;
+
+            winData = new Object();
+            winData.type = d.value["type"];
+            winData.vis = "bar";
+            winData.value = d.value.Wins;
+
+            lossData = new Object();
+            lossData.type = d.value["type"];
+            lossData.vis = "bar";
+            lossData.value = d.value.Losses;
+
+            totalData = new Object();
+            totalData.type = d.value["type"];
+            totalData.vis = "bar";
+            totalData.value = d.value.TotalGames;
+
+            /* Maximum value cannot be more than total Value, since 
+             * Total Value = Win Value + Lose Value. */
+
+            // aggregateMax = Math.max(aggregateMax, winData.value);
+            // aggregateMax = Math.max(aggregateMax, lossData.value);
+            aggregateMax = Math.max(aggregateMax, totalData.value);
+
+            return [teamNameData, goalData, roundData, 
+                    winData, lossData, totalData];
+                // [1, 2, 3, 4, 5, 6];
+            // return teamData.map(function(col) {
+            //     // switch(col) {
+            //     //     case 1: // Team
+            //     // }
+            //     // console.log("teamData.map");
+            //     // console.log(teamData);
+            //     // console.log("col = ");
+            //     // console.log(col);
+            //     return {column: 5, value: cellData};
+            // });
         })
         .enter()
-        .append("td")
-        .text("2");
-        // .merge(tableElements);
-
-    // tableElements.exit().remove();
-
-    // tableElements
-        // .html(function(d) {
-        //     return "hello";
-        // })
-        // .attr();
-        // .text(function (d) {
-        //     return "hello";
-        // })
-        ;
-        // .enter()
-        // .append("tr")
-        // .selectAll("td")
+        .append("td");
         // .data(function(d) {
-        //     console.log("Hello");
+        //     console.log("data d");
+        //     console.log(d);
+        //     return [30, 30, 40, 50, 60];
+        // })
+        // .text(function(d) {
+        //     // console.log("text d");
+        //     console.log(d);
+        //     // return d.value.value;
+        //     return d.value;
+        // });
+        // .merge(tableCells);
+
+    // tableCells.exit().remove();
+
+    // Text Cells | Team, Round/Result.
+    tableCells.filter(function(d) {
+            return d.vis == 'text';
+        })
+        .text(function(d) {
+            return d.value;
+        });
+
+    // Goal Cells | Goals
+    tableCells.filter(function(d) {
+            return d.vis == "goals";
+        })
+        .text("goal cell");
+
+    // Bar Cells | Wins, Losses, Total Games.
+    tableCells.filter(function(d) {
+            return d.vis == "bar";
+        })
+        // .text("bar cell")
+        .append("svg")
+        .attr("width", cellWidth)
+        .attr("height", cellHeight)
+        .append("g")
+        .append("rect")
+        .attr("width", function (d) {
+            return gameScale(d.value/aggregateMax);
+        })
+        .attr("height", barHeight)
+        .style("fill", function(d) {
+            console.log("d.value");
+            console.log(d.value);
+            console.log(aggregateColorScale(d.value/aggregateMax));
+            return aggregateColorScale(d.value/aggregateMax);
+        });
+        // .attr("transform", "translate(0, "+ (cellHeight-4) +")");;
+
+        // .attr("x", function(d) {
+        //     return xScale(d.year);
+        // })
+        // .attr("y", function(d, i) {
+        //     return yScale(d[selectedDimension]);
+        // })
+        // .attr("width", function (d) {
+        //     return gameScale(d);
+        // })
+        // .attr("height", barHeight)
+        // .style("fill", function(d) {
+        //     return aggregateColorScale(d);
         // });
 
-    console.log("--------------------------------------");
+
+    // .append("svg")
+    //     .attr("width", 2*cellWidth)
+    //     .attr("height", cellHeight)
+    //     .append("g")
+    //     .attr("transform", "translate(0, "+ (cellHeight-4) +")")
+    //     .call(xAxis);
+
+
+    // console.log("--------------------------------------");
     // console.log("TR");
     // console.log(tableRows);
     // console.log("TD");
-    // console.log(tableElements);
+    // console.log(tableCells);
 
-    console.log("d3.selectAll(\"td\")");
-    console.log(d3.selectAll("td").filter(function(d){
-        return true;
-    }));
+    // console.log("d3.selectAll(\"td\")");
+    // console.log(d3.selectAll("td").filter(function(d){
+    //     return true;
+    // }));
 
 
     // var bars = svg.select("#bars").selectAll("rect").data(allWorldCupData);
