@@ -133,7 +133,7 @@ function updateTable()
 
     var tableRows = 
         scoreTable.selectAll("tr")
-        .data(teamData)
+        .data(tableElements)
         .enter()
         .append("tr");
 
@@ -201,6 +201,10 @@ function updateTable()
             return d.vis == 'text';
         })
         .text(function(d) {
+            if (d.type != 'aggregate')
+            {
+                return "x" + d.value;
+            }
             return d.value;
         });
 
@@ -242,7 +246,13 @@ function updateTable()
             // console.log(d.value);
             // console.log(aggregateColorScale(d.value/aggregateMax));
             if (d.type == 'aggregate')
+            {
                 return goalColorScale(d.value.delta);
+            }
+            else
+            {
+                return "black";
+            }
         })
         .classed("goalBar", true);
 
@@ -364,13 +374,26 @@ function updateList(i) {
 
     // ******* TODO: PART IV *******
 
-    console.log(i);
+    // console.log(i);
 
     var scoreTable = d3.select("#matchTable").select("tbody");
     var tableRows = scoreTable.selectAll("tr");
 
+    // console.log(tableElements);
+
     // console.log(tableRows);
-    console.log(tableRows.data()[i]);
+    // console.log(tableRows.data()[i]);
+    if (tableRows.data().length <= i ||
+        tableRows.data()[i+1].value.type == "aggregate")
+    {
+        tableRows.data()[i].value.games.forEach(function(elem) {
+            tableElements.splice(i, 0, elem);
+        })
+    }
+
+    // console.log(tableElements);
+
+    updateTable();
 }
 
 /**
