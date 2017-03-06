@@ -103,28 +103,8 @@ function createTable()
         .attr("width", 2*cellWidth)
         .attr("height", cellHeight)
         .append("g")
-        // .attr("y", 45)
         .attr("transform", "translate(0, "+ (cellHeight-4) +")")
-        // .transition()
-        // .duration(trans_dur)
-        // .attr("transform", "translate(" + 0 + "," + (chartHeight - yAxisHeight) + ")")
         .call(xAxis);
-      // .selectAll("*")
-        // .attr("y", 15);
-        // .attr("x", -28)
-        // .attr("transform", "rotate(-90)");
-        // .attr("transform", "translate(0, -10)");
-    
-
-    // tableElements = teamData;
-
-
-    // var scoreTable = svg.select("#matchTable").selectAll("tr").data(teamData);
-
-    // scoreTable = scoreTable.enter()
-    //     .append("tr")
-    //     .merge(bars);
-
 
 
     // ******* TODO: PART V (Extra Credit) *******
@@ -156,27 +136,15 @@ function updateTable()
         .data(teamData)
         .enter()
         .append("tr");
-        // .merge(tableRows);
 
-    // tableRows.exit().remove();
+    tableRows.exit().remove();
 
     var teamNameData, goalData, roundData, winData, lossData, totalData;
     var goalSubData;
 
     var tableCells = 
         tableRows.selectAll("td")
-        // d3.select("#matchTable").select("tbody").selectAll("tr").selectAll("td")
         .data(function(d) {
-            // console.log(d);
-            // console.log(d.value["Goals Made"]);
-            // return d.value["Goals Made"];
-            // return d;
-
-            // cellData = new Object();
-            // cellData.type = d.value["type"];
-            // cellData.vis = "goals";
-            // // // cellData.value = "howtf";
-            // cellData.value = Math.floor(Math.random() * 101);
 
             teamNameData = new Object();
             teamNameData.type = d.value["type"];    // aggregate?
@@ -222,34 +190,11 @@ function updateTable()
 
             return [teamNameData, goalData, roundData, 
                     winData, lossData, totalData];
-                // [1, 2, 3, 4, 5, 6];
-            // return teamData.map(function(col) {
-            //     // switch(col) {
-            //     //     case 1: // Team
-            //     // }
-            //     // console.log("teamData.map");
-            //     // console.log(teamData);
-            //     // console.log("col = ");
-            //     // console.log(col);
-            //     return {column: 5, value: cellData};
-            // });
         })
         .enter()
         .append("td");
-        // .data(function(d) {
-        //     console.log("data d");
-        //     console.log(d);
-        //     return [30, 30, 40, 50, 60];
-        // })
-        // .text(function(d) {
-        //     // console.log("text d");
-        //     console.log(d);
-        //     // return d.value.value;
-        //     return d.value;
-        // });
-        // .merge(tableCells);
 
-    // tableCells.exit().remove();
+    tableCells.exit().remove();
 
     // Text Cells | Team, Round/Result.
     tableCells.filter(function(d) {
@@ -258,6 +203,7 @@ function updateTable()
         .text(function(d) {
             return d.value;
         });
+
 
     // Goal Cells | Goals
     tableCells.filter(function(d) {
@@ -273,7 +219,10 @@ function updateTable()
             return goalScale(Math.min(d.value.made, d.value.conceded));
         })
         .attr("y", function(d) {
-            return barHeight/6;
+            if (d.type == 'aggregate')
+                return barHeight/6;
+            else
+                return barHeight/3;
         })
         .attr("width", function (d) {
             if (d.value.delta == 0)
@@ -282,27 +231,20 @@ function updateTable()
             }
             return goalScale(Math.abs(d.value.delta)-2);
         })
-        .attr("height", barHeight*13/18)
+        .attr("height", function(d) {
+            if (d.type == 'aggregate')
+                return barHeight*13/18;
+            else
+                return barHeight/3;
+        })
         .style("fill", function(d) {
             // console.log("d.value");
             // console.log(d.value);
             // console.log(aggregateColorScale(d.value/aggregateMax));
-            return goalColorScale(d.value.delta);
+            if (d.type == 'aggregate')
+                return goalColorScale(d.value.delta);
         })
         .classed("goalBar", true);
-
-        // .attr("cx", function (d) {
-        //     return goalScale(d.value.made);
-        // })
-        // .attr("cy", barHeight/2)
-        // .attr("r", barHeight*13/36)
-        // // .style("fill", function(d) {
-        // //     console.log("d.value");
-        // //     console.log(d.value);
-        // //     console.log(aggregateColorScale(d.value/aggregateMax));
-        // //     return aggregateColorScale(d.value/aggregateMax);
-        // // });
-        // .style("fill", "blue");
 
     tableCells.filter(function(d) {
             return d.vis == "goals";
@@ -314,12 +256,6 @@ function updateTable()
         })
         .attr("cy", barHeight/2 + barHeight/36)
         .attr("r", barHeight*13/36)
-        // .style("fill", function(d) {
-        //     console.log("d.value");
-        //     console.log(d.value);
-        //     console.log(aggregateColorScale(d.value/aggregateMax));
-        //     return aggregateColorScale(d.value/aggregateMax);
-        // });
         .style("fill", function(d) {
             if (d.value.delta == 0)
             {
@@ -338,12 +274,6 @@ function updateTable()
         })
         .attr("cy", barHeight/2 + barHeight/36)
         .attr("r", barHeight*13/36)
-        // .style("fill", function(d) {
-        //     console.log("d.value");
-        //     console.log(d.value);
-        //     console.log(aggregateColorScale(d.value/aggregateMax));
-        //     return aggregateColorScale(d.value/aggregateMax);
-        // });
         .style("fill", function(d) {
             if (d.value.delta == 0)
             {
@@ -368,16 +298,12 @@ function updateTable()
         })
         .attr("height", barHeight)
         .style("fill", function(d) {
-            // console.log("d.value");
-            // console.log(d.value);
-            // console.log(aggregateColorScale(d.value/aggregateMax));
             return aggregateColorScale(d.value/aggregateMax);
         });
 
     tableCells.filter(function(d) {
             return d.vis == "bar";
         })
-        // .text("bar cell")
         .selectAll("svg")
         .append("text")
         .text(function(d) {
@@ -385,83 +311,35 @@ function updateTable()
                 return "";
             return d.value;
         })
-        // .attr("x", 10)
+        .attr("x", function(d) {
+            return gameScale(d.value/aggregateMax);
+        })
         .attr("y", cellHeight/2 + 4)
-        // .attr("y", 10)
         .attr("dx", function(d) {
             // if (d.value <= 1)
             //     return "10px";
             return "-4px";
         })
         .attr("text-anchor", "end")
-        .attr("x", function(d) {
-            return gameScale(d.value/aggregateMax);
-        })
         .style("fill", function(d) {
             // if (d.value <= 1)
             //     return "grey";
             return "white";
         });
 
-    // tableCells.filter(function(d) {
-    //         return d.vis == "bar";
-    //     })
-    //     // .text("bar cell")
-    //     .selectAll("svg")
-    //     .append("rect")
-    //     .text(function(d) {
-    //         console.log(d.value);
-    //         return "test";
-    //     })
-    //     .attr("width", function (d) {
-    //         return gameScale(d.value/aggregateMax)/2;
-    //     })
-    //     .attr("height", barHeight)
-    //     .style("fill", "black");
-        // .attr("transform", "translate(0, "+ (cellHeight-4) +")");;
 
-        // .attr("x", function(d) {
-        //     return xScale(d.year);
-        // })
-        // .attr("y", function(d, i) {
-        //     return yScale(d[selectedDimension]);
-        // })
-        // .attr("width", function (d) {
-        //     return gameScale(d);
-        // })
-        // .attr("height", barHeight)
-        // .style("fill", function(d) {
-        //     return aggregateColorScale(d);
-        // });
-
-
-    // .append("svg")
-    //     .attr("width", 2*cellWidth)
-    //     .attr("height", cellHeight)
-    //     .append("g")
-    //     .attr("transform", "translate(0, "+ (cellHeight-4) +")")
-    //     .call(xAxis);
-
-
-    // console.log("--------------------------------------");
-    // console.log("TR");
-    // console.log(tableRows);
-    // console.log("TD");
-    // console.log(tableCells);
-
-    // console.log("d3.selectAll(\"td\")");
-    // console.log(d3.selectAll("td").filter(function(d){
-    //     return true;
-    // }));
-
-
-    // var bars = svg.select("#bars").selectAll("rect").data(allWorldCupData);
-
-    // bars = bars.enter()
-    //     .append("rect")
-    //     .merge(bars);
-
-    // bars.exit().remove();
+    // Clicking on a cell.
+    tableRows
+        .on('click', function(d, i) {
+            if (d.value.type == 'aggregate')
+            {
+                updateList(i);
+            }
+            else
+            {
+                // Do Nothing
+            }
+        });
 
 
 };
@@ -486,7 +364,13 @@ function updateList(i) {
 
     // ******* TODO: PART IV *******
 
+    console.log(i);
 
+    var scoreTable = d3.select("#matchTable").select("tbody");
+    var tableRows = scoreTable.selectAll("tr");
+
+    // console.log(tableRows);
+    console.log(tableRows.data()[i]);
 }
 
 /**
